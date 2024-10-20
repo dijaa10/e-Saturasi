@@ -1,8 +1,15 @@
-<?php
+<?php 
+include '../../config.php';
+session_start();
+if (!isset($_SESSION['nik'])) {
+  header('location:index.php?aksi=belum');
 
+}
+$role=$_SESSION['role'];
+$nama=$_SESSION['nama_guru'];
+$email=$_SESSION['email_guru'];
+$foto=$_SESSION['foto_profil_guru'];
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10,7 +17,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Guru | E-Saturasi</title>
+        <title>Admin | E-Saturasi</title>
         <link rel="icon" type="image/x-icon" href="./images/icon.png" />
 
     <!-- StyleSheets  -->
@@ -26,10 +33,10 @@
             <div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
                 <div class="nk-sidebar-element nk-sidebar-head">
                     <div class="nk-sidebar-brand">
-                        <a href="#" class="logo-link nk-sidebar-logo">
-                            <img class="logo-light logo-img" src="./img/logo.png" srcset="./img/logo2x.png 2x" alt="logo">
-                            <img class="logo-dark logo-img" src="./img/logo-dark.png" srcset="./img/logo-dark2x.png 2x" alt="logo-dark">
-                            <img class="logo-small logo-img logo-img-small" src="./img/logo-small.png" srcset="./img/logo-small2x.png 2x" alt="logo-small">
+                        <a href="html/index.html" class="logo-link nk-sidebar-logo">
+                            <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
+                            <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                            <img class="logo-small logo-img logo-img-small" src="./images/logo-small.png" srcset="./images/logo-small2x.png 2x" alt="logo-small">
                         </a>
                     </div>
                     <div class="nk-menu-trigger me-n2">
@@ -45,30 +52,38 @@
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">Fitur</h6>
                                 </li>
-                                <li class="nk-menu-item">
-                                    <a href="../guru/index.php" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-dashboard-fill"></em></span>
-                                        <span class="nk-menu-text">Dashboard</span>
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
+                                        <span class="nk-menu-text">Manajemen User</span>
                                     </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item">
+                                            <a href="../admin/guru.php" class="nk-menu-link"><span class="nk-menu-text">Guru</span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="../admin/siswa.php" class="nk-menu-link"><span class="nk-menu-text">Siswa</span></a>
+                                        </li>
+                                    </ul>
                                 </li>
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-setting"></em></span>
+                                        <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
                                         <span class="nk-menu-text">Pengaturan</span>
                                     </a>
                                     <ul class="nk-menu-sub">
                                         <li class="nk-menu-item">
-                                            <a href="../guru/jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Jadwal</span></a>
-                                            </li>
-                                        <li class="nk-menu-item">
-                                            <a href="../guru/tugas.php" class="nk-menu-link"><span class="nk-menu-text">Tugas</span></a>
+                                            <a href="../admin/jurusan.php" class="nk-menu-link"><span class="nk-menu-text">Data Jurusan</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="../guru/materi.php" class="nk-menu-link"><span class="nk-menu-text">Materi</span></a>
+                                            <a href="../admin/kelas.php" class="nk-menu-link"><span class="nk-menu-text">Data Kelas</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="../guru/ujian.php" class="nk-menu-link"><span class="nk-menu-text">Ujian</span></a>
+                                            <a href="../admin/mata_pelajaran.php" class="nk-menu-link"><span class="nk-menu-text">Data Mata Pelajaran</span></a>
                                         </li>
+                                        <li class="nk-menu-item">
+                                            <a href="../admin/jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Data Jadwal</span></a>
+                                    </li>
                                 </ul>
                             </li>
                          </div>
@@ -99,23 +114,31 @@
                                     <li class="dropdown user-dropdown">
                                         <a href="#" class="dropdown-toggle me-n1" data-bs-toggle="dropdown">
                                             <div class="user-toggle">
-                                                <div class="user-avatar sm">
-                                                    <em class="icon ni ni-user-alt"></em>
+                                            <div class="user-avatar">
+                                                    <?php if (!empty($foto)): ?>
+                                                        <img src="<?php echo $foto ?>" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%;">
+                                                    <?php else: ?>
+                                                        <span>#</span> <!-- Placeholder jika tidak ada foto -->
+                                                    <?php endif; ?>
                                                 </div>
                                                 <div class="user-info d-none d-xl-block">
-                                                    <div class="user-name dropdown-indicator">Bachtiar Dwi Pramudi</div>
+                                                    <div class="user-name dropdown-indicator"><?php echo $_SESSION['nama_guru']?></div>
                                                 </div>
                                             </div>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-md dropdown-menu-end">
                                             <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                                                 <div class="user-card">
-                                                    <div class="user-avatar">
-                                                        <span>#</span>
-                                                    </div>
+                                                <div class="user-avatar">
+                                                    <?php if (!empty($foto)): ?>
+                                                        <img src="<?php echo $foto ?>" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%;">
+                                                    <?php else: ?>
+                                                        <span>#</span> <!-- Placeholder jika tidak ada foto -->
+                                                    <?php endif; ?>
+                                                </div>
                                                     <div class="user-info">
-                                                        <span class="lead-text">Bachtiar Dwi Pramudi</span>
-                                                        <span class="sub-text">root@mail.id</span>
+                                                        <span class="lead-text"><?php echo $_SESSION['nama_guru']?></span>
+                                                        <span class="sub-text"><?php echo $_SESSION['email_guru']?></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -126,7 +149,7 @@
                                             </div>
                                             <div class="dropdown-inner">
                                                 <ul class="link-list">
-                                                    <li><a href="#"><em class="icon ni ni-signout"></em><span>Keluar</span></a></li>
+                                                    <li><a href="logout.php"><em class="icon ni ni-signout"></em><span>Keluar</span></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -166,7 +189,7 @@
                                                     <div class="card-inner">
                                                         <div class="card-title-group">
                                                             <div class="card-title">
-                                                                <h6 class="title">Kelas Yang Diampu</h6>
+                                                                <h6 class="title">Jumlah Guru</h6>
                                                             </div>
                                                         </div>
                                                         <div class="data">
@@ -186,7 +209,27 @@
                                                     <div class="card-inner">
                                                         <div class="card-title-group">
                                                             <div class="card-title">
-                                                                <h6 class="title">Mata Pelajaran Yang Diampu</h6>
+                                                                <h6 class="title">Jumlah Siswa</h6>
+                                                            </div>
+                                                        </div>
+                                                        <div class="data">
+                                                            <div class="data-group">
+                                                                <div class="amount">0</div>
+                                                                <div class="nk-ecwg6-ck">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div><!-- .card-inner -->
+                                                </div><!-- .nk-ecwg -->
+                                            </div><!-- .card -->
+                                        </div><!-- .col -->
+                                        <div class="col-xxl-3 col-sm-6">
+                                            <div class="card">
+                                                <div class="nk-ecwg nk-ecwg6">
+                                                    <div class="card-inner">
+                                                        <div class="card-title-group">
+                                                            <div class="card-title">
+                                                                <h6 class="title">Jumlah Kelas</h6>
                                                             </div>
                                                         </div>
                                                         <div class="data">

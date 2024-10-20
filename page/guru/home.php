@@ -1,8 +1,15 @@
-<?php
+<?php 
+include '../../config.php';
+session_start();
+if (!isset($_SESSION['nik'])) {
+  header('location:index.php?aksi=belum');
 
+}
+$role=$_SESSION['role'];
+$nama=$_SESSION['nama_guru'];
+$email=$_SESSION['email_guru'];
+$foto=$_SESSION['foto_profil_guru'];
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10,7 +17,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin | E-Saturasi</title>
+        <title>Guru | E-Saturasi</title>
         <link rel="icon" type="image/x-icon" href="./images/icon.png" />
 
     <!-- StyleSheets  -->
@@ -27,8 +34,8 @@
                 <div class="nk-sidebar-element nk-sidebar-head">
                     <div class="nk-sidebar-brand">
                         <a href="html/index.html" class="logo-link nk-sidebar-logo">
-                            <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
-                            <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                            <img class="logo-light logo-img" src="./images/icon.png" srcset="./images/logo2x.png 2x" alt="logo">
+                            <img class="logo-dark logo-img" src="./images/icon.png" srcset="./images/logo.png 2x" alt="logo-dark">
                             <img class="logo-small logo-img logo-img-small" src="./images/logo-small.png" srcset="./images/logo-small2x.png 2x" alt="logo-small">
                         </a>
                     </div>
@@ -95,8 +102,8 @@
                             </div>
                             <div class="nk-header-brand d-xl-none">
                                 <a href="html/index.html" class="logo-link">
-                                    <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                                    <img class="logo-light logo-img" src="./images/icon.png" srcset="./images/icon.png 2x" alt="logo">
+                                    <img class="logo-dark logo-img" src="./images/icon.png" srcset="./images/icon.png 2x" alt="logo-dark">
                                 </a>
                             </div><!-- .nk-header-brand -->
                             <div class="nk-header-search ms-3 ms-xl-0">
@@ -107,23 +114,31 @@
                                     <li class="dropdown user-dropdown">
                                         <a href="#" class="dropdown-toggle me-n1" data-bs-toggle="dropdown">
                                             <div class="user-toggle">
-                                                <div class="user-avatar sm">
-                                                    <em class="icon ni ni-user-alt"></em>
+                                            <div class="user-avatar">
+                                                    <?php if (!empty($foto)): ?>
+                                                        <img src="<?php echo $foto ?>" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%;">
+                                                    <?php else: ?>
+                                                        <span>#</span> <!-- Placeholder jika tidak ada foto -->
+                                                    <?php endif; ?>
                                                 </div>
                                                 <div class="user-info d-none d-xl-block">
-                                                    <div class="user-name dropdown-indicator">Bachtiar Dwi Pramudi</div>
+                                                    <div class="user-name dropdown-indicator"><?php echo $nama?></div>
                                                 </div>
                                             </div>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-md dropdown-menu-end">
                                             <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                                                 <div class="user-card">
-                                                    <div class="user-avatar">
-                                                        <span>#</span>
-                                                    </div>
+                                                <div class="user-avatar">
+                                                    <?php if (!empty($foto)): ?>
+                                                        <img src="<?php echo $foto ?>" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%;">
+                                                    <?php else: ?>
+                                                        <span>#</span> <!-- Placeholder jika tidak ada foto -->
+                                                    <?php endif; ?>
+                                                </div>
                                                     <div class="user-info">
-                                                        <span class="lead-text">Bachtiar Dwi Pramudi</span>
-                                                        <span class="sub-text">root@mail.id</span>
+                                                        <span class="lead-text"><?php echo $nama?></span>
+                                                        <span class="sub-text"><?php echo $email?></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -134,7 +149,7 @@
                                             </div>
                                             <div class="dropdown-inner">
                                                 <ul class="link-list">
-                                                    <li><a href="#"><em class="icon ni ni-signout"></em><span>Keluar</span></a></li>
+                                                    <li><a href="logout.php"><em class="icon ni ni-signout"></em><span>Keluar</span></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -174,7 +189,7 @@
                                                     <div class="card-inner">
                                                         <div class="card-title-group">
                                                             <div class="card-title">
-                                                                <h6 class="title">Jumlah Guru</h6>
+                                                                <h6 class="title">Kelas Yang Diampu</h6>
                                                             </div>
                                                         </div>
                                                         <div class="data">
@@ -194,27 +209,7 @@
                                                     <div class="card-inner">
                                                         <div class="card-title-group">
                                                             <div class="card-title">
-                                                                <h6 class="title">Jumlah Siswa</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="data">
-                                                            <div class="data-group">
-                                                                <div class="amount">0</div>
-                                                                <div class="nk-ecwg6-ck">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div><!-- .card-inner -->
-                                                </div><!-- .nk-ecwg -->
-                                            </div><!-- .card -->
-                                        </div><!-- .col -->
-                                        <div class="col-xxl-3 col-sm-6">
-                                            <div class="card">
-                                                <div class="nk-ecwg nk-ecwg6">
-                                                    <div class="card-inner">
-                                                        <div class="card-title-group">
-                                                            <div class="card-title">
-                                                                <h6 class="title">Jumlah Kelas</h6>
+                                                                <h6 class="title">Mata Pelajaran Yang Diampu</h6>
                                                             </div>
                                                         </div>
                                                         <div class="data">

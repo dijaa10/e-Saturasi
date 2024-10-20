@@ -1,7 +1,37 @@
 <?php
+include 'config.php';
+session_start(); 
+$pesan = "";
+if (isset($_POST['kirim'])) {
+	$role="admin";
+    $nik = mysqli_real_escape_string($koneksi, $_POST['nik']);
+    $pass = mysqli_real_escape_string($koneksi, $_POST['password']);
+    $query = mysqli_query($koneksi, "SELECT * FROM guru WHERE nik='$nik' AND password_guru='$pass' AND role='$role'");
+    if (!$query) {
+        die("Query Error: " . mysqli_error($koneksi)); 
+    }
+    $row = mysqli_num_rows($query);
+    if ($row > 0) {
+        $data = mysqli_fetch_array($query);
 
+        $_SESSION['nik'] = $data['nik'];
+        $_SESSION['email_guru'] = $data['email_guru'];
+        $_SESSION['nama_guru'] = $data['nama_guru'];
+		$_SESSION['foto_profil_guru'] = $data['foto_profil_guru'];
+        header("location:page/admin/home.php");
+    } else {
+        header("location:login-admin.php?aksi=eror");
+    }
+}
+if (isset($_GET['aksi'])) {
+    $aksi = $_GET['aksi'];
+    if ($aksi == 'eror') {
+        $pesan = "Username atau Password yang Anda masukkan salah.";
+    } elseif ($aksi == 'belum') {
+        $pesan = "Anda belum login.";
+    }
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,8 +57,8 @@
 							<h1 class="fs-4 card-title fw-bold mb-4">Login Admin</h1>
 							<form method="POST" class="needs-validation" novalidate="" autocomplete="off">
 								<div class="mb-3">
-									<label class="mb-2 text-muted" for="email">Email Address</label>
-									<input id="email" type="email" class="form-control" name="email" value="" required autofocus>
+									<label class="mb-2 text-muted" for="email">NIK</label>
+									<input id="nik" type="text" class="form-control" name="nik" value="" required>
 									<div class="invalid-feedback">
 										Email is invalid
 									</div>
@@ -45,21 +75,27 @@
 								</div>
 
 								<div class="d-flex align-items-center">
-									<div class="form-check">
-										<input type="checkbox" name="remember" id="remember" class="form-check-input">
-										<label for="remember" class="form-check-label">Remember Me</label>
-									</div>
-									<button type="submit" class="btn btn-primary ms-auto">
+									
+									<button type="submit" name="kirim" class="btn btn-primary ms-auto">
 										Login
 									</button>
 								</div>
+								 
 							</form>
+							<br><center>
+							<font color="red"><?php echo  $pesan; ?></font>
 						</div>
+						<div class="card-footer py-3 border-0">
+							<div class="text-center">
+								Tidak bisa mengakses akun? hubungi admin.
+							</div>
 						</div>
 					</div>
 					<div class="text-center mt-5 text-muted">
 						made with <3 &copy; &mdash; @projectpintar
 					</div>
+					<div class="text-center mt-5 text-muted">
+					
 				</div>
 			</div>
 		</div>
