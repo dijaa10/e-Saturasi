@@ -2,7 +2,6 @@
 include 'config.php';
 session_start(); 
 $pesan = "";
-$role = "";
 if (isset($_POST['kirim'])) {
 	$role="guru";
     $nik = mysqli_real_escape_string($koneksi, $_POST['nik']);
@@ -14,26 +13,24 @@ if (isset($_POST['kirim'])) {
     $row = mysqli_num_rows($query);
     if ($row > 0) {
         $data = mysqli_fetch_array($query);
-
         $_SESSION['nik'] = $data['nik'];
         $_SESSION['email_guru'] = $data['email_guru'];
         $_SESSION['nama_guru'] = $data['nama_guru'];
 		$_SESSION['foto_profil_guru'] = $data['foto_profil_guru'];
         header("location:page/guru/home.php");
     } else {
-        header("location:login-guru.php?aksi=eror");
+        header("location:login-admin.php?aksi=eror");
     }
 }
 if (isset($_GET['aksi'])) {
     $aksi = $_GET['aksi'];
     if ($aksi == 'eror') {
-        $pesan = "Username atau Password yang Anda masukkan salah.";
+        $pesan = "Username atau Password yang Anda Masukkan Salah.";
     } elseif ($aksi == 'belum') {
         $pesan = "Anda belum login.";
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
